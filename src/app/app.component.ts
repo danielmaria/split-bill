@@ -2,11 +2,19 @@ import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@
 import { FormControl } from '@angular/forms';
 import { ModalDismissReasons, NgbActiveModal, NgbModal } from '@ng-bootstrap/ng-bootstrap';
 import { auditTime, fromEvent, Observable } from 'rxjs';
+import { CleanTableComponent } from './components/clean-table/clean-table.component';
+import { DeletePersonComponent } from './components/delete-person/delete-person.component';
 import { ItemModelComponent, Item } from './components/item-model/item-model.component';
+import { ManagePeopleComponent } from './components/manage-people/manage-people.component';
 
 export interface DraggableOptions {
   zones?: Array<string>;
   data?: any;
+}
+
+export class Bill {
+  owner?: string;
+  itens?: Item[]
 }
 
 @Component({
@@ -17,27 +25,52 @@ export interface DraggableOptions {
 export class AppComponent {
 
   itens: Item[] = []
-  bill: Map<string, Item[]> = new Map
+  bills: Bill[]
 
   @ViewChild('itemDraggable', {static: true}) messagesElementRef?: ElementRef;
 
-
   constructor(private modalService: NgbModal) {
-    // fromEvent(this.messagesElementRef?.nativeElement, 'touchmove', {passive: true}).pipe(auditTime(500))
-  //   .subscribe((event: any) => this.scrollEventCalculator(event));
+    let storageBills = localStorage.getItem('bill')
+    if (storageBills) {
+      this.bills = JSON.parse(storageBills)
+      this.itens = JSON.parse(localStorage.getItem('itens') || '[]')
+    } else {
+      this.bills = []
+    }
   }
 
-  //itemDraggable
-
-  ngOnInit() {
-
+  cleanTable() {
+    let model = this.modalService.open(CleanTableComponent);
+    model.componentInstance.action.subscribe(($e: any) => {
+      localStorage.clear()
+      this.bills = []
+      this.itens = []
+    })
   }
 
+  managePeople() {
+    let model = this.modalService.open(ManagePeopleComponent);
+    model.componentInstance.people.subscribe(($e: string) => {
+      let newBill = {owner: $e, itens: []}
+      this.bills.push(newBill)
+      this.updateLocalStorage()
+    })
+  }
 
-	open() {
+  delete(billOwner: string) {
+    let model = this.modalService.open(DeletePersonComponent);
+    model.componentInstance.owner = billOwner
+    model.componentInstance.action.subscribe(($e: string) => {
+      this.bills = this.bills.filter(b => b.owner !== billOwner)
+      this.updateLocalStorage()
+    })
+  }
+
+	addItem() {
 		let model = this.modalService.open(ItemModelComponent);
     model.componentInstance.itens.subscribe(($e: any) => {
       this.itens.push($e)
+      localStorage.setItem('itens', JSON.stringify(this.itens))
     })
 	}
 
@@ -55,21 +88,29 @@ export class AppComponent {
     event.preventDefault();
     const data = event.dataTransfer?.getData('text/plain');
     const item = {icon: data!.split('/')[1], value: parseFloat(data!.split('/')[2]), datetime: new Date()} as Item
-
-    if (this.bill.has(person)) {
-      const numberArray = this.bill.get(person);
-      numberArray?.push(item!);
+    let personsBill = this.bills.find(b => b.owner === person)
+    if (personsBill) {
+      personsBill.itens?.push(item!)
     } else {
-      this.bill.set(person, [item!]);
+      this.bills.push({owner: person, itens: [item!]});
     }
+    this.updateLocalStorage()
   }
 
-  calculateSum(values: Item[]): number {
+  updateLocalStorage() {
+    localStorage.setItem('bill', JSON.stringify(this.bills))
+  }
+
+  calculateSum(values: Item[] | undefined): number {
+    if (!values) {
+      return 0
+    }
     return values.map(i => i.value).reduce((a, b) => a + b, 0);
   }
 
   revert(person: string) {
-    this.bill.get(person)?.pop()
+    let bill = this.bills.filter(b => b.owner === person)
+    bill[0]?.itens?.pop()
   }
 
 }

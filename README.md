@@ -1,5 +1,8 @@
 # SplitBill
 
+[Test it](https://danielmaria.github.io/split-bill/)
+
+
 SplitBill is a web application developed using Angular that helps friends calculate the amount each person needs to pay after a group outing at a bar, restaurant, or any other shared expense. The project leverages the browser's cache for data storage, eliminating the need for a backend database. The application allows users to enter the total bill amount, select friends from a pre-defined list, and specify their individual expenses.
 
 ## Key Features:

@@ -1,49 +1,43 @@
 <div class="modal-header">
-    <h4 class="modal-title">Add itens!</h4>
-    <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
+  <h4 class="modal-title">Add itens!</h4>
+  <button type="button" class="btn-close" aria-label="Close" (click)="activeModal.dismiss('Cross click')"></button>
 </div>
 <div class="modal-body">
-    <p>Fill the price and select one icon to it!</p>
+  <p>Fill the price and select one icon to it!</p>
 
-<div class="row">
-  <input
-      class="col form-control"
-      placeholder="$"
-      type="number"
-      [formControl]="value"
-      ngDefaultControl
-  />
+  <div class="row">
+    <input class="col form-control" placeholder="$" type="number" [formControl]="value" ngDefaultControl />
 
-  <button type="button" class="col col-2 btn btn-outline-secondary me-2" (click)="addItem('beer')">
-    <span class="material-symbols-outlined">
-      sports_bar
+    <button type="button" class="col col-2 btn btn-outline-secondary me-2" (click)="addItem('beer')">
+      <span class="material-symbols-outlined">
+        sports_bar
       </span>
       <span class="d-block" style="font-size: .8em;">beer</span>
 
-  </button>
+    </button>
 
-  <button type="button" class="col col-2 btn btn-outline-secondary me-2" (click)="addItem('drink')">
-    <span class="material-symbols-outlined">
-      local_bar
+    <button type="button" class="col col-2 btn btn-outline-secondary me-2" (click)="addItem('drink')">
+      <span class="material-symbols-outlined">
+        local_bar
       </span>
       <span class="d-block" style="font-size: .8em;">drink</span>
-  </button>
+    </button>
 
-  <button type="button" class="col col-2 btn btn-outline-secondary me-2" (click)="addItem('cart')">
-    <span class="material-symbols-outlined">
-      shopping_cart
+    <button type="button" class="col col-2 btn btn-outline-secondary me-2" (click)="addItem('cart')">
+      <span class="material-symbols-outlined">
+        shopping_cart
       </span>
       <span class="d-block" style="font-size: .8em;">cart</span>
-  </button>
+    </button>
 
-  <button type="button" class="col col-2 btn btn-outline-secondary me-2" (click)="addItem('food')">
-    <span class="material-symbols-outlined">
-      local_pizza
+    <button type="button" class="col col-2 btn btn-outline-secondary me-2" (click)="addItem('food')">
+      <span class="material-symbols-outlined">
+        local_pizza
       </span>
       <span class="d-block" style="font-size: .8em;">food</span>
-  </button>
-</div>
+    </button>
+  </div>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
+  <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
 </div>
