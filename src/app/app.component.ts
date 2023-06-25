@@ -27,6 +27,8 @@ export class AppComponent {
   itens: Item[] = []
   bills: Bill[]
 
+  showDeleteItemComponent = false
+
   @ViewChild('itemDraggable', {static: true}) messagesElementRef?: ElementRef;
 
   constructor(private modalService: NgbModal) {
@@ -78,10 +80,12 @@ export class AppComponent {
     if (event.target instanceof HTMLElement) {
       event.dataTransfer?.setData('text/plain', event.target.textContent || '');
     }
+    this.showDeleteItemComponent = true
   }
 
   onDragOver(event: DragEvent) {
     event.preventDefault();
+    // this.showDeleteItemComponent = false
   }
 
   onDrop(event: DragEvent, person: string) {
@@ -95,6 +99,21 @@ export class AppComponent {
       this.bills.push({owner: person, itens: [item!]});
     }
     this.updateLocalStorage()
+    this.showDeleteItemComponent = false
+  }
+
+  onDeleteItem(event: DragEvent) {
+    event.preventDefault();
+    const data = event.dataTransfer?.getData('text/plain');
+    const item = {icon: data!.split('/')[1], value: parseFloat(data!.split('/')[2]), datetime: new Date()} as Item
+    
+    this.itens =  this.itens.filter(i => i.value !== item.value && i.icon !== item.icon)
+    localStorage.setItem('itens', JSON.stringify(this.itens))
+    this.showDeleteItemComponent = false
+  }
+
+  lostDrop() {
+    this.showDeleteItemComponent = false
   }
 
   updateLocalStorage() {

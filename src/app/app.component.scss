@@ -1,43 +1,82 @@
+body {
+  height: 100%;
+}
 .header {
-    background-color: #f2f2f2;
-    padding: 20px;
+  background-color: #f2f2f2;
+  padding: 20px;
 }
 
 .main {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    margin-top: 50px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-top: 50px;
+}
+
+.item-draggable,
+.delete-item {
+  padding: 1em 2em;
+  color: white;
+  border-radius: 5px;
+  margin: 0.5em;
 }
 
 .item-draggable {
-    background: #4679BD;
-    padding: 1em 2em;
-    color: white;
-    border-radius: 5px;
-    margin: 0.5em;
+  background: #4679BD;
+  max-width: 6em;
+
+}
+
+.delete-item {
+  background: red;
+  position: fixed;
+  width: 16em;
+  height: 6em;
+  margin: 0;
+}
+
+.options {
+  position: relative;
+}
+
+.bill {
+  position: relative;
+  width: 80%;
+}
+
+.bill > * {
+
+  background-color: #f8f17a;
+}
+.bill:after {
+  content: "";
+  display: block;
+  height: 10px;
+  /* TODO Add browser prefixes */
+  background: linear-gradient(45deg, transparent 33.333%, #f8f17a 33.333%, #f8f17a 66.667%, transparent 66.667%), linear-gradient(-45deg, transparent 33.333%, #f8f17a 33.333%, #f8f17a 66.667%, transparent 66.667%);
+  background-size: 8px 20px;
+  background-position: 0 -10px;
 }
 
 .drop-zone {
-    background-color: #e1e1e1;
-    padding: 20px;
-    margin: 1em;
-    width: 80%;
-  }
+  padding: 20px;
+}
 
-  .right, .total {
-    text-align: right;
-  }
+.right,
+.total {
+  text-align: right;
+}
 
-  .total {
-    font-size: 1.2em;
-    font-weight: bold;
-  }
+.total {
+  font-size: 1.2em;
+  font-weight: bold;
+}
 
-  small {
-    font-size: 0.6em;
-  }
+small {
+  font-size: 0.6em;
+}
 
-  .right, .left {
-    border-bottom: dashed black;
-  }
+.right,
+.left {
+  border-bottom: dotted rgba(116, 115, 115, 0.535);
+}

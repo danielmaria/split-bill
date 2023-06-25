@@ -1,43 +1,49 @@
 <link rel="stylesheet"
   href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@48,400,0,0" />
 
-<div class="header">
+<div class="header text-center">
   <h1>Split Bill</h1>
 </div>
 
-<div class="main">
-  <div class="row">
-    <button class="btn btn-lg btn-outline-primary col m-1" (click)="addItem()">
-      <span class="material-symbols-outlined">
-        add_task
-      </span>
-      <br>
-      <small style="white-space: nowrap">Item</small>
-    </button>
-    <button class="btn btn-lg btn-outline-primary col m-1" (click)="managePeople()">
-      <span class="material-symbols-outlined">
-        manage_accounts
-      </span>
-      <br>
-      <small style="white-space: nowrap">Person</small>
-    </button>
+<div class="main h-100"  (dragover)="onDragOver($event)" (drop)="lostDrop()">
+  <div class="row text-center">
+    <div class="options">
+      <button class="btn btn-lg btn-outline-primary col m-1" (click)="addItem()">
+        <span class="material-symbols-outlined">
+          add_task
+        </span>
+        <br>
+        <small style="white-space: nowrap">Item</small>
+      </button>
+      <button class="btn btn-lg btn-outline-primary col m-1" (click)="managePeople()">
+        <span class="material-symbols-outlined">
+          manage_accounts
+        </span>
+        <br>
+        <small style="white-space: nowrap">Person</small>
+      </button>
 
 
-    <button class="btn btn-lg btn-outline-primary col m-1" (click)="cleanTable()">
-      <span class="material-symbols-outlined">
-        mop
-      </span>
-      <br>
-      <small style="white-space: nowrap">Clean table</small>
-    </button>
+      <button class="btn btn-lg btn-outline-primary col m-1" (click)="cleanTable()">
+        <span class="material-symbols-outlined">
+          mop
+        </span>
+        <br>
+        <small style="white-space: nowrap">Clean table</small>
+      </button>
+    </div>
+
+    <div class="text-center" *ngIf="showDeleteItemComponent" style="position: absolute;">
+      <div class="drop-zone delete-item" (dragover)="onDragOver($event)" (drop)="onDeleteItem($event)">
+        Delete Item
+      </div>
+    </div>
   </div>
 
   <div class="row m-2">
     <ng-container *ngFor="let item of itens">
-
       <div draggable="true" class="item-draggable col text-center" (dragstart)="onDragStart($event)" #itemDraggable>
         <div class="row">
-
           <span class="material-symbols-outlined" *ngIf="item.icon === 'drink'">
             local_bar
           </span>
@@ -67,32 +73,35 @@
   </div>
 
   <ng-container *ngFor="let bill of bills ">
-    <div class="drop-zone" (dragover)="onDragOver($event)" (drop)="onDrop($event, bill.owner!)">
-      <p>
-        <button (click)="delete(bill.owner!)" class="btn btn-sm btn-outline-primary">
-          <span class="material-symbols-outlined">
-            delete
-          </span>
-        </button>
-        <button (click)="revert(bill.owner!)" class="btn btn-sm btn-outline-primary">
-          <span class="material-symbols-outlined">
-            undo
-          </span>
-        </button>
-        {{bill.owner!}}
-      </p>
+    <div class="bill">
 
-      <ng-container *ngFor="let item of bill.itens">
-        <div class="container">
-          <div class="row">
-            <div class="left col">
-              {{item.icon | titlecase }} <small>({{item.datetime | date:'HH:mm:ss'}})</small>
+      <div class="drop-zone" (dragover)="onDragOver($event)" (drop)="onDrop($event, bill.owner!)">
+        <p>
+          <button (click)="delete(bill.owner!)" class="btn btn-sm btn-outline-primary" style="border: none;">
+            <span class="material-symbols-outlined">
+              delete
+            </span>
+          </button>
+          <button (click)="revert(bill.owner!)" class="btn btn-sm btn-outline-primary" style="border: none;">
+            <span class="material-symbols-outlined">
+              undo
+            </span>
+          </button>
+          {{bill.owner!}}
+        </p>
+
+        <ng-container *ngFor="let item of bill.itens">
+          <div class="container">
+            <div class="row">
+              <div class="left col">
+                {{item.icon | titlecase }} <small>({{item.datetime | date:'HH:mm:ss'}})</small>
+              </div>
+              <div class="right col">{{item.value}} €</div>
             </div>
-            <div class="right col">{{item.value}} €</div>
           </div>
-        </div>
-      </ng-container>
-      <p class="total">Total: {{ calculateSum(bill.itens) }} €</p>
+        </ng-container>
+        <p class="total">Total: {{ calculateSum(bill.itens) }} €</p>
+      </div>
     </div>
   </ng-container>
 </div>
